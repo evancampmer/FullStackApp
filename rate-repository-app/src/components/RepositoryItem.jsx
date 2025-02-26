@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
     }
 })
 const numberModifier = (number) => {
-    console.log(number)
     if (number > 999) {
         return (`${Math.round(number / 100) / 10}k`)
     }

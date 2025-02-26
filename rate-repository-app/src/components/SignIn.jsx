@@ -2,6 +2,9 @@ import Text from './Text';
 import { useFormik } from 'formik';
 import { View, TextInput, Pressable, StyleSheet } from 'react-native';
 import * as yup from 'yup';
+import useSignIn from '../hooks/useSignIn';
+import { useNavigate } from "react-router";
+
 
 const validationSchema = yup.object().shape({
     username: yup
@@ -91,11 +94,20 @@ const SignInForm = ({onSubmit}) => {
     };
 
 const SignIn = () => {
-    const onSubmit = (values) => {
-        console.log(values)
-      };
-    
-      return <SignInForm onSubmit={onSubmit} />;
+  const [signIn] = useSignIn();
+  const navigate = useNavigate();
+  const onSubmit = async (values) => {
+      const { username, password } = values
+      console.log(username, password)
+      try {
+        const data = await signIn({username, password})
+        console.log(data.data.authenticate.accessToken)
+        navigate("/")
+      } catch (e) {
+        console.log(e)
+      }
+    };
+    return <SignInForm onSubmit={onSubmit} />;
 }    
 
 export default SignIn;
