@@ -6,3 +6,33 @@ mutation Authenticate($credentials: AuthenticateInput!) {
     accessToken
     }
 }`
+
+export const CREATE_REVIEW = gql`
+mutation CreateReview($review: CreateReviewInput){
+    createReview(review: $review){
+        user {
+            username
+        }
+        text
+        repositoryId
+        rating
+        id
+        createdAt
+    }
+}`
+
+export const CREATE_USER = gql`
+mutation CreateUser($user: CreateUserInput!){
+    createUser(user: $user){
+        id
+        username
+        createdAt
+        reviewCount
+        }
+    }
+`
+export const DELETE_REVIEW = gql`
+mutation DeleteReview($deleteReviewId: ID!){
+    deleteReview(id: $deleteReviewId)
+}
+`

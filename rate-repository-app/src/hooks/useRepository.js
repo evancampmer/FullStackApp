@@ -1,15 +1,15 @@
 import { useQuery } from '@apollo/client';
 
-import { GET_REPOSITORIES } from '../graphql/queries';
+import { REPOSITORY } from '../graphql/queries';
 import Text from '../components/Text';
 
-const useRepositories = () => {
-    const { data, error, loading, fetchMore, refetch } = useQuery(GET_REPOSITORIES, {
+const useRepository = ({ id }) => {
+    const { data, error, loading, fetchMore, refetch } = useQuery(REPOSITORY, {
         fetchPolicy: 'cache-and-network',
-        variables: {orderBy: orderBy, orderDirection: orderDirection, searchKeyword: searchKeyword, first: first, after: after}
+        variables: {repositoryId: id, after: after, first: first}
     })
     
-    if(isLoading) {
+    if(loading) {
         return <Text>Loading...</Text>
     }
 
@@ -18,7 +18,7 @@ const useRepositories = () => {
     }
 
     const handleFetchMore = () => {
-        const canFetchMore = !loading && data?.repositories.pageInfo.hasNextPage;
+        const canFetchMore = !loading && data?.repository.reviews.pageInfo.hasNextPage;
     
         if (!canFetchMore) {
           return;
@@ -26,18 +26,18 @@ const useRepositories = () => {
     
         fetchMore({
           variables: {
-            after: data.repositories.pageInfo.endCursor,
+            after: data.repository.reviews.pageInfo.endCursor,
             ...variables,
           },
         });
       };
 
     return {
-        repositories: data ? data.repositories : undefined,
+        repository: data ? data.repository : undefined,
         fetchMore: handleFetchMore,
         loading,
         refetch
     };
 };
 
-export default useRepositories;
+export default useRepository;
